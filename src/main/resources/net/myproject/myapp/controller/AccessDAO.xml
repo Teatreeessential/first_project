@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper   
+    PUBLIC "-//mybatis.apache.org//DTD SQL Mapper 3.0//EN"      
+    "http://mybatis.apache.org/dtd/mybatis-3-mapper.dtd">
+
+
+<mapper namespace="net.myproject.myapp.controller.AccessDAO">
+
+ 	<!-- 은행명 토큰값 등을 받아오는 곳 -->	
+	<select id="get_fintech_num" resultType="Get_UseNumVO">
+         select bank_name,fintech_use_num
+         from tbl_login a ,tbl_balance b
+         where a.id = b.id 
+    </select>
+    
+    <select id="getUser" parameterType="LoginVO" resultType="LoginVO">
+	SELECT id, access_token
+	FROM   tbl_login
+	WHERE  id=#{id} AND passwd=#{passwd}
+	</select>
+    
+    <select id="transaction_list" parameterType="String" resultType="Get_UseNumVO">
+        select bank_name,fintech_use_num
+        from tbl_balance
+        where bank_name=#{bank_name}
+    
+    </select>
+
+
+    <select id ="update_category" statementType="CALLABLE" parameterType='HashMap'>
+         {call update_category(
+         						#{p_id, mode=IN,jdbcType=VARCHAR},
+         						#{p_category,mode=IN,jdbcType=VARCHAR}   		
+		 )}
+    </select>
+    <insert id="save_data" parameterType="HashMap">
+         insert into tbl_report values(#{p_id},#{branch_name},#{trandate})
+    </insert>
+    
+</mapper>
